@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Book Catalog</string>
+    <string name="search_hint">Search book</string>
+</resources>
