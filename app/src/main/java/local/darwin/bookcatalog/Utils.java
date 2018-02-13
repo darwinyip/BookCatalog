@@ -1,5 +1,7 @@
 package local.darwin.bookcatalog;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -32,7 +34,23 @@ final class Utils {
         return list.stream().map(Object::toString).collect(Collectors.joining(delimiter));
     }
 
+    static Bitmap loadImage(String requestUrl) {
+        Log.d(LOG_TAG, "Loading image from URL...");
+        Bitmap image = null;
+        try {
+            URL url = new URL(requestUrl);
+            image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+        } catch (MalformedURLException e) {
+            Log.e(LOG_TAG, "Problem parsing URL.", e);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem opening connection.", e);
+        }
+        return image;
+
+    }
+
     static List<Book> fetchBookData(String requestUrl) {
+        Log.d(LOG_TAG, "Fetching Book data...");
         URL url = createUrl(requestUrl);
         String jsonResponse = null;
         try {
@@ -61,10 +79,37 @@ final class Utils {
 
                 JSONObject volumeInfo = items.getJSONObject(i).getJSONObject("volumeInfo");
 
-                bookBuilder.setTitle(volumeInfo.getString("title"));
-                bookBuilder.setAuthors(toList(volumeInfo.getJSONArray("authors")));
-                bookBuilder.setPublisher(volumeInfo.getString("publisher"));
-                bookBuilder.setDescription(volumeInfo.getString("description"));
+                if (volumeInfo.has("title")) {
+                    bookBuilder.setTitle(volumeInfo.getString("title"));
+                }
+
+                if (volumeInfo.has("subtitle")) {
+                    bookBuilder.setSubtitle(volumeInfo.getString("subtitle"));
+                }
+
+                if (volumeInfo.has("authors")) {
+                    bookBuilder.setAuthors(toList(volumeInfo.getJSONArray("authors")));
+                }
+
+                if (volumeInfo.has("publisher")) {
+                    bookBuilder.setPublisher(volumeInfo.getString("publisher"));
+                }
+
+                if (volumeInfo.has("description")) {
+                    bookBuilder.setDescription(volumeInfo.getString("description"));
+                }
+
+                if (volumeInfo.has("categories")) {
+                    bookBuilder.setCategories(toList(volumeInfo.getJSONArray("categories")));
+                }
+
+                if (volumeInfo.has("imageLinks")) {
+                    if (volumeInfo.getJSONObject("imageLinks").has("thumbnail")) {
+                        bookBuilder.setThumbnail_url(volumeInfo.getJSONObject("imageLinks").getString("thumbnail"));
+                    } else if (volumeInfo.getJSONObject("imageLinks").has("smallThumbnail")) {
+                        bookBuilder.setThumbnail_url(volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail"));
+                    }
+                }
 
                 if (volumeInfo.has("industryIdentifiers")) {
                     JSONArray industryIdentifiers = volumeInfo.getJSONArray("industryIdentifiers");
@@ -77,6 +122,7 @@ final class Utils {
                         }
                     }
                 }
+
                 books.add(bookBuilder.createBook());
             }
         } catch (JSONException e) {

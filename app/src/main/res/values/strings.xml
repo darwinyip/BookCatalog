@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Book Catalog</string>
     <string name="search_hint">Search book</string>
+    <string name="empty_view_text">Search for some books!</string>
+    <string name="book_thumbnail_text">Book thumbnail</string>
 </resources>

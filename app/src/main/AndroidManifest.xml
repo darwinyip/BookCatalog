@@ -17,6 +17,7 @@
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
@@ -27,6 +28,9 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+        <activity
+            android:name=".BookDetailActivity"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

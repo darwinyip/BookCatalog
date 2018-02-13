@@ -11,29 +11,43 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<List<Book>> {
-    public static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private static final String BOOK_URL = "https://www.googleapis.com/books/v1/volumes?q=android&maxResults=15";
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String BOOK_URL = "https://www.googleapis.com/books/v1/volumes?q=%s&maxResults=15";
+    public static List<Book> books = new ArrayList<>();
     private BookAdapter adapter;
+    private LoaderManager loaderManager;
+    private RecyclerView recyclerView;
+    private TextView empty;
+    private ProgressBar progressBar;
+    private String query = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "Creating activity...");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         handleIntent(getIntent());
-        RecyclerView recyclerView = findViewById(R.id.list);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        adapter = new BookAdapter(new ArrayList<>());
-        recyclerView.setLayoutManager(linearLayoutManager);
+
+        recyclerView = findViewById(R.id.list);
+        empty = findViewById(R.id.empty);
+        progressBar = findViewById(R.id.progress);
+
+        adapter = new BookAdapter(books);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(1, null, this);
+
+        Log.d(LOG_TAG, "Getting Loader Manager");
+        loaderManager = getLoaderManager();
     }
 
     @Override
@@ -57,26 +71,46 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     }
 
     private void handleIntent(Intent intent) {
+        Log.d(LOG_TAG, "Handling intent...");
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
+            query = intent.getStringExtra(SearchManager.QUERY);
+
+            Log.d(LOG_TAG, "Init Loader");
+            loaderManager.destroyLoader(1);
+            loaderManager.initLoader(1, null, this);
+
+            recyclerView.setVisibility(View.GONE);
+            empty.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
-        return new BookLoader(this, BOOK_URL);
+        Log.d(LOG_TAG, "Creating loader...");
+        return new BookLoader(this, String.format(BOOK_URL, query));
     }
 
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
+        Log.d(LOG_TAG, "Finishing loader...");
         if (books != null) {
             adapter.addList(books);
             adapter.notifyDataSetChanged();
+
+            recyclerView.setVisibility(View.VISIBLE);
+            empty.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+        } else {
+            recyclerView.setVisibility(View.GONE);
+            empty.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onLoaderReset(Loader<List<Book>> loader) {
         adapter.clear();
+        adapter.notifyDataSetChanged();
     }
 }

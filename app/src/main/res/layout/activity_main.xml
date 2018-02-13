@@ -9,5 +9,21 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/empty_view_text"
+        android:textAlignment="center"
+        android:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@android:style/Widget.Holo.ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </LinearLayout>
