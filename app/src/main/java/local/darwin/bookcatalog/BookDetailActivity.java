@@ -31,16 +31,7 @@ public class BookDetailActivity extends Activity {
         TextView isbn13 = findViewById(R.id.isbn13_detail);
         TextView description = findViewById(R.id.description_detail);
 
-//        thumbnail.setImageBitmap(Utils.loadImage(book.getThumbnail_url()));
-//        title.setText(book.getTitle());
-//        subtitle.setText(book.getSubtitle());
-//        authors.setText(Utils.joinList(book.getAuthors(), ", "));
-//        categories.setText(Utils.joinList(book.getCategories(), ", "));
-//        publisher.setText(book.getPublisher());
-//        isbn10.setText(book.getIsbn10());
-//        isbn13.setText(book.getIsbn13());
-//        description.setText(book.getDescription());
-
+//        Utils.setView(thumbnail, book.getThumbnail_url());
         Utils.setView(title, book.getTitle());
         Utils.setView(subtitle, book.getSubtitle());
         Utils.setView(authors, Utils.joinList(book.getAuthors(), ", "));

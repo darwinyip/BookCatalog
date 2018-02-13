@@ -96,6 +96,11 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Starts DetailBookActivity with the query results
+     *
+     * @param intent
+     */
     private void handleIntent(Intent intent) {
         Log.d(LOG_TAG, "Handling intent...");
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -109,6 +114,11 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         }
     }
 
+    /**
+     * Sets which view should be visible depending on the state.
+     *
+     * @param state
+     */
     private void setViewVisibility(State state) {
         switch (state) {
             case LOADED:

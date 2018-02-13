@@ -28,15 +28,27 @@ final class Utils {
     private static final String LOG_TAG = Utils.class.getSimpleName();
 
     private Utils() {
-
     }
 
+    /**
+     * Concatenate strings in a list by a given delimiter.
+     *
+     * @param list      List of strings
+     * @param delimiter
+     * @return Concatenated string
+     */
     static String joinList(List<String> list, String delimiter) {
         Log.d(LOG_TAG, "Joining List");
         if (list == null) return null;
         return list.stream().map(Object::toString).collect(Collectors.joining(delimiter));
     }
 
+    /**
+     * Retrieves image from URL.
+     *
+     * @param requestUrl URL of image
+     * @return Bitmap of image
+     */
     static Bitmap loadImage(String requestUrl) {
         Log.d(LOG_TAG, "Loading image from URL...");
         Bitmap image = null;
@@ -52,6 +64,12 @@ final class Utils {
 
     }
 
+    /**
+     * Assigns the data to the View. If data is null, hide the View.
+     *
+     * @param view ImageView or TextView
+     * @param data A string
+     */
     static void setView(View view, String data) {
         if (data == null) {
             view.setVisibility(View.GONE);
@@ -62,6 +80,12 @@ final class Utils {
         }
     }
 
+    /**
+     * Fetches Book data from Google Books API.
+     *
+     * @param requestUrl Google Books API URL
+     * @return List of Books
+     */
     static List<Book> fetchBookData(String requestUrl) {
         Log.d(LOG_TAG, "Fetching Book data...");
         URL url = createUrl(requestUrl);
@@ -75,6 +99,12 @@ final class Utils {
         return extractBookFeatures(jsonResponse);
     }
 
+    /**
+     * Extracts JSON data into Books.
+     *
+     * @param bookJSON JSON from Google Books API
+     * @return List of Books
+     */
     private static List<Book> extractBookFeatures(String bookJSON) {
         Log.d(LOG_TAG, "Extracting Book features...");
         if (TextUtils.isEmpty(bookJSON)) {
@@ -145,6 +175,13 @@ final class Utils {
         return books;
     }
 
+    /**
+     * Converts a JSONArray into a List<String>.
+     *
+     * @param jsonArray
+     * @return List of Strings
+     * @throws JSONException
+     */
     private static List<String> toList(JSONArray jsonArray) throws JSONException {
         List<String> list = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -153,6 +190,13 @@ final class Utils {
         return list;
     }
 
+    /**
+     * Makes HTTP request.
+     *
+     * @param url
+     * @return String with the HTTP response
+     * @throws IOException
+     */
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
         HttpURLConnection urlConnection = null;
@@ -182,6 +226,13 @@ final class Utils {
         return jsonResponse;
     }
 
+    /**
+     * Reads InputStream
+     *
+     * @param inputStream
+     * @return Concatenated String
+     * @throws IOException
+     */
     private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
         if (inputStream != null) {
@@ -196,6 +247,12 @@ final class Utils {
         return output.toString();
     }
 
+    /**
+     * Creates URL.
+     *
+     * @param requestUrl
+     * @return URL object
+     */
     private static URL createUrl(String requestUrl) {
         URL url = null;
         try {
