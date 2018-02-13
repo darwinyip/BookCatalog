@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +50,16 @@ final class Utils {
         }
         return image;
 
+    }
+
+    static void setView(View view, String data) {
+        if (data == null) {
+            view.setVisibility(View.GONE);
+        } else if (view instanceof ImageView) {
+            ((ImageView) view).setImageBitmap(Utils.loadImage(data));
+        } else if (view instanceof TextView) {
+            ((TextView) view).setText(data);
+        }
     }
 
     static List<Book> fetchBookData(String requestUrl) {

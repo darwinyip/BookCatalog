@@ -23,6 +23,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String BOOK_URL = "https://www.googleapis.com/books/v1/volumes?q=%s&maxResults=15";
     public static List<Book> books = new ArrayList<>();
+
     private BookAdapter adapter;
     private LoaderManager loaderManager;
     private RecyclerView recyclerView;
@@ -70,21 +71,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         handleIntent(intent);
     }
 
-    private void handleIntent(Intent intent) {
-        Log.d(LOG_TAG, "Handling intent...");
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            query = intent.getStringExtra(SearchManager.QUERY);
-
-            Log.d(LOG_TAG, "Init Loader");
-            loaderManager.destroyLoader(1);
-            loaderManager.initLoader(1, null, this);
-
-            recyclerView.setVisibility(View.GONE);
-            empty.setVisibility(View.GONE);
-            progressBar.setVisibility(View.VISIBLE);
-        }
-    }
-
     @Override
     public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
         Log.d(LOG_TAG, "Creating loader...");
@@ -98,13 +84,9 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
             adapter.addList(books);
             adapter.notifyDataSetChanged();
 
-            recyclerView.setVisibility(View.VISIBLE);
-            empty.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+            setViewVisibility(State.LOADED);
         } else {
-            recyclerView.setVisibility(View.GONE);
-            empty.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
+            setViewVisibility(State.EMPTY);
         }
     }
 
@@ -113,4 +95,39 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         adapter.clear();
         adapter.notifyDataSetChanged();
     }
+
+    private void handleIntent(Intent intent) {
+        Log.d(LOG_TAG, "Handling intent...");
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            query = intent.getStringExtra(SearchManager.QUERY);
+
+            Log.d(LOG_TAG, "Init Loader");
+            loaderManager.destroyLoader(1);
+            loaderManager.initLoader(1, null, this);
+
+            setViewVisibility(State.IN_PROGRESS);
+        }
+    }
+
+    private void setViewVisibility(State state) {
+        switch (state) {
+            case LOADED:
+                recyclerView.setVisibility(View.VISIBLE);
+                empty.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                break;
+            case IN_PROGRESS:
+                recyclerView.setVisibility(View.GONE);
+                empty.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+                break;
+            default:
+                recyclerView.setVisibility(View.GONE);
+                empty.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    enum State {EMPTY, IN_PROGRESS, LOADED}
 }
