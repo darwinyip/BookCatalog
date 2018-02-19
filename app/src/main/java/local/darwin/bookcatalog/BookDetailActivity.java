@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import static local.darwin.bookcatalog.MainActivity.books;
@@ -21,7 +22,7 @@ public class BookDetailActivity extends Activity {
         int position = intent.getExtras().getInt("position");
         Book book = books.get(position);
 
-//        ImageView thumbnail = findViewById(R.id.thumbnail_detail);
+        ImageView thumbnail = findViewById(R.id.thumbnail_detail);
         TextView title = findViewById(R.id.title_detail);
         TextView subtitle = findViewById(R.id.subtitle_detail);
         TextView authors = findViewById(R.id.authors_detail);
@@ -31,7 +32,7 @@ public class BookDetailActivity extends Activity {
         TextView isbn13 = findViewById(R.id.isbn13_detail);
         TextView description = findViewById(R.id.description_detail);
 
-//        Utils.setView(thumbnail, book.getThumbnail_url());
+        Utils.setView(thumbnail, book.getThumbnail());
         Utils.setView(title, book.getTitle());
         Utils.setView(subtitle, book.getSubtitle());
         Utils.setView(authors, Utils.joinList(book.getAuthors(), ", "));

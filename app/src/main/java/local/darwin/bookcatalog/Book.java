@@ -1,12 +1,15 @@
 package local.darwin.bookcatalog;
 
+import android.graphics.Bitmap;
+
 import java.util.List;
 
 class Book {
     private String title, subtitle, publisher, description, isbn10, isbn13, thumbnail_url;
     private List<String> authors, categories;
+    private Bitmap thumbnail;
 
-    Book(String title, String subtitle, String publisher, String description, String isbn10, String isbn13, String thumbnail_url, List<String> authors, List<String> categories) {
+    Book(String title, String subtitle, String publisher, String description, String isbn10, String isbn13, String thumbnail_url, List<String> authors, List<String> categories, Bitmap thumbnail) {
         this.title = title;
         this.subtitle = subtitle;
         this.publisher = publisher;
@@ -16,6 +19,7 @@ class Book {
         this.thumbnail_url = thumbnail_url;
         this.authors = authors;
         this.categories = categories;
+        this.thumbnail = thumbnail;
     }
 
     String getTitle() {
@@ -54,6 +58,10 @@ class Book {
         return categories;
     }
 
+    Bitmap getThumbnail() {
+        return thumbnail;
+    }
+
     static class BookBuilder {
         private String title;
         private String subtitle;
@@ -64,6 +72,7 @@ class Book {
         private String thumbnail_url;
         private List<String> authors;
         private List<String> categories;
+        private Bitmap thumbnail;
 
         BookBuilder setTitle(String title) {
             this.title = title;
@@ -110,8 +119,14 @@ class Book {
             return this;
         }
 
+        BookBuilder setThumbnail(Bitmap thumbnail) {
+            this.thumbnail = thumbnail;
+            return this;
+        }
+
+
         Book createBook() {
-            return new Book(title, subtitle, publisher, description, isbn10, isbn13, thumbnail_url, authors, categories);
+            return new Book(title, subtitle, publisher, description, isbn10, isbn13, thumbnail_url, authors, categories, thumbnail);
         }
     }
 }

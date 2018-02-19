@@ -104,17 +104,21 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
      */
     private void handleIntent(Intent intent) {
         Log.d(LOG_TAG, "Handling intent...");
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+        if (Intent.ACTION_MAIN.equals(intent.getAction())) {
+            if (!books.isEmpty()) {
+                Log.d(LOG_TAG, "Init Loader");
+                loaderManager.initLoader(1, null, this);
+            }
+        } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             query = intent.getStringExtra(SearchManager.QUERY);
             Log.d(LOG_TAG, "Query string " + query);
 
             Log.d(LOG_TAG, "Destroy Loader");
             loaderManager.destroyLoader(1);
-
+            Log.d(LOG_TAG, "Init Loader");
+            loaderManager.initLoader(1, null, this);
             setViewVisibility(State.IN_PROGRESS);
         }
-        Log.d(LOG_TAG, "Init Loader");
-        loaderManager.initLoader(1, null, this);
     }
 
     /**

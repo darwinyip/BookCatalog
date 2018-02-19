@@ -70,13 +70,13 @@ final class Utils {
      * @param view ImageView or TextView
      * @param data A string
      */
-    static void setView(View view, String data) {
+    static void setView(View view, Object data) {
         if (data == null) {
             view.setVisibility(View.GONE);
         } else if (view instanceof ImageView) {
-            ((ImageView) view).setImageBitmap(Utils.loadImage(data));
+            ((ImageView) view).setImageBitmap((Bitmap) data);
         } else if (view instanceof TextView) {
-            ((TextView) view).setText(data);
+            ((TextView) view).setText((String) data);
         }
     }
 
@@ -149,8 +149,10 @@ final class Utils {
                 if (volumeInfo.has("imageLinks")) {
                     if (volumeInfo.getJSONObject("imageLinks").has("thumbnail")) {
                         bookBuilder.setThumbnail_url(volumeInfo.getJSONObject("imageLinks").getString("thumbnail"));
+                        bookBuilder.setThumbnail(loadImage(volumeInfo.getJSONObject("imageLinks").getString("thumbnail")));
                     } else if (volumeInfo.getJSONObject("imageLinks").has("smallThumbnail")) {
                         bookBuilder.setThumbnail_url(volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail"));
+                        bookBuilder.setThumbnail(loadImage(volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail")));
                     }
                 }
 

@@ -29,5 +29,6 @@ class BookHolder extends RecyclerView.ViewHolder {
         this.position = position;
         title.setText(book.getTitle());
         authors.setText(Utils.joinList(book.getAuthors(), ", "));
+        thumbnail.setImageBitmap(book.getThumbnail());
     }
 }
