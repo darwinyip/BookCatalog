@@ -37,8 +37,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        handleIntent(getIntent());
-
         recyclerView = findViewById(R.id.list);
         empty = findViewById(R.id.empty);
         progressBar = findViewById(R.id.progress);
@@ -49,6 +47,8 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 
         Log.d(LOG_TAG, "Getting Loader Manager");
         loaderManager = getLoaderManager();
+
+        handleIntent(getIntent());
     }
 
     @Override
@@ -92,6 +92,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader<List<Book>> loader) {
+        Log.d(LOG_TAG, "Resetting loader...");
         adapter.clear();
         adapter.notifyDataSetChanged();
     }
@@ -105,13 +106,15 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         Log.d(LOG_TAG, "Handling intent...");
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             query = intent.getStringExtra(SearchManager.QUERY);
+            Log.d(LOG_TAG, "Query string " + query);
 
-            Log.d(LOG_TAG, "Init Loader");
+            Log.d(LOG_TAG, "Destroy Loader");
             loaderManager.destroyLoader(1);
-            loaderManager.initLoader(1, null, this);
 
             setViewVisibility(State.IN_PROGRESS);
         }
+        Log.d(LOG_TAG, "Init Loader");
+        loaderManager.initLoader(1, null, this);
     }
 
     /**
