@@ -36,10 +36,10 @@ public class BookDetailActivity extends Activity {
         Utils.setView(title, book.getTitle());
         Utils.setView(subtitle, book.getSubtitle());
         Utils.setView(authors, Utils.joinList(book.getAuthors(), ", "));
-        Utils.setView(categories, Utils.joinList(book.getCategories(), ", "));
-        Utils.setView(publisher, book.getPublisher());
-        Utils.setView(isbn10, book.getIsbn10());
-        Utils.setView(isbn13, book.getIsbn13());
+        Utils.setView(categories, "Categories: " + Utils.joinList(book.getCategories(), ", "));
+        Utils.setView(publisher, "Publisher: " + book.getPublisher());
+        Utils.setView(isbn10, "ISBN-10: " + book.getIsbn10());
+        Utils.setView(isbn13, "ISBN-13: " + book.getIsbn13());
         Utils.setView(description, book.getDescription());
 
     }

@@ -47,8 +47,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 
         Log.d(LOG_TAG, "Getting Loader Manager");
         loaderManager = getLoaderManager();
-
-        handleIntent(getIntent());
     }
 
     @Override
@@ -80,7 +78,8 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
         Log.d(LOG_TAG, "Finishing loader...");
-        if (books != null) {
+        adapter.clear();
+        if (books != null && !books.isEmpty()) {
             adapter.addList(books);
             adapter.notifyDataSetChanged();
 
@@ -103,7 +102,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
      * @param intent
      */
     private void handleIntent(Intent intent) {
-        Log.d(LOG_TAG, "Handling intent...");
+        Log.d(LOG_TAG, "Handling intent: " + intent.getAction());
         if (Intent.ACTION_MAIN.equals(intent.getAction())) {
             if (!books.isEmpty()) {
                 Log.d(LOG_TAG, "Init Loader");
